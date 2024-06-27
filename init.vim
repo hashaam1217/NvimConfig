@@ -30,6 +30,7 @@ Plug 'ixru/nvim-markdown'
 "Markdown
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tree-sitter-grammars/tree-sitter-markdown'
+Plug 'HakonHarnes/img-clip.nvim'
 "Plug 'tadmccorkle/markdown.nvim'
 
 "SystemVerilog Plugins
