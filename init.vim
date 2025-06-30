@@ -8,7 +8,7 @@ function! DoRemote(arg)
   UpdateRemotePlugins
 endfunction
 
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+"Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
 Plug 'tomtom/tcomment_vim' " gc comments
 Plug 'airblade/vim-gitgutter'
 Plug 'w0rp/ale'
@@ -60,7 +60,7 @@ if executable('fzf')
   " OSX vs Linux loading (depending on where fzf is)
   let s:uname = system("echo -n \"$(uname)\"")
   if !v:shell_error && s:uname == "Darwin"
-    Plug '/usr/local/opt/fzf'
+    Plug '/opt/homebrew/bin/fzf'
   else
     Plug 'junegunn/fzf', {'dir': '~/.local/src/fzf', 'do': './install --all' }
   endif
@@ -68,6 +68,7 @@ if executable('fzf')
 else
   Plug 'ctrlpvim/ctrlp.vim'
 endif
+Plug 'junegunn/fzf', {'dir': '~/.local/src/fzf', 'do': './install --all' }
 
 call plug#end()
 
@@ -75,13 +76,13 @@ call plug#end()
 " }}}
 " LOOK AND SYNTAX HILIGHTING {{{
 set t_Co=256
-syntax on
+syntax off
 highlight Normal ctermbg=233
 colorscheme nnkd
 
 " whitespace
-highlight ExtraWhitespace ctermbg=red guibg=red
-autocmd Syntax * syn match ExtraWhitespace /\s\+$/ containedin=ALL
+" highlight ExtraWhitespace ctermbg=red guibg=red
+" autocmd Syntax * syn match ExtraWhitespace /\s\+$/ containedin=ALL
 
 " Undefined Marks
 highlight UndefinedMarks ctermfg=yellow
@@ -97,6 +98,9 @@ au BufRead,BufNewFile todo*           set filetype=todo
 au BufRead,BufNewFile *.txt           set filetype=todo
 au BufRead,BufNewFile *.pp            set filetype=puppet
 
+" Automatically disable ALE for C files
+autocmd FileType C ALEDisable
+
 " Better split character
 " Override color scheme to make split them black
 " set fillchars=vert:\|
@@ -109,6 +113,13 @@ set cursorline
 highlight LineNr ctermfg=grey
 highlight CursorLineNr cterm=bold
 
+" treesitter
+lua << EOF
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { "c", "cpp", "lua", "python", "javascript", "html", "css" },
+  highlight = { enable = true, additional_vim_regex_highlighting = false },
+}
+EOF
 
 " }}}
 " KEYMAPPINGS {{{
@@ -155,7 +166,7 @@ nnoremap <leader>ev :edit $MYVIMRC<cr>
 nnoremap <leader>evs :source $MYVIMRC<cr>
 
 " Toggle paste with F2
-set pastetoggle=<F2>
+" set pastetoggle=<F2>
 
 " Terminal Mode
 " Use escape to go back to normal mode
@@ -217,8 +228,6 @@ endif
 set ignorecase
 set smartcase
 
-" Textwidth for folding
-set textwidth=100
 
 " }}}
 " PLUGINS + CUSTOM FUNCTIONS {{{
