@@ -32,6 +32,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tree-sitter-grammars/tree-sitter-markdown'
 Plug 'HakonHarnes/img-clip.nvim'
 "Plug 'tadmccorkle/markdown.nvim'
+Plug 'https://github.com/MeanderingProgrammer/render-markdown.nvim'
 
 "SystemVerilog Plugins
 Plug 'wbthomason/packer.nvim'
