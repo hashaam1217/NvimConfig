@@ -28,7 +28,10 @@ Plug 'ixru/nvim-markdown'
 "Plug 'github/copilot.vim'
 
 "Markdown
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" Declared once only: a second, bare `Plug` for the same repo would override
+" this one and silently drop the ':TSUpdate' hook. Parsers must be updated in
+" lockstep with the plugin, so losing that hook breaks highlighting on update.
+Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main', 'do': ':TSUpdate'}
 Plug 'tree-sitter-grammars/tree-sitter-markdown'
 Plug 'HakonHarnes/img-clip.nvim'
 "Plug 'tadmccorkle/markdown.nvim'
@@ -44,7 +47,6 @@ Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-nvim-lua'
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'https://codeberg.org/Guilty/VerilogImproved'
 
@@ -53,7 +55,6 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'BurntSushi/ripgrep'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'sharkdp/fd'
-Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-tree/nvim-web-devicons'
 
 " FZF / Ctrlp for file navigation
@@ -115,11 +116,26 @@ highlight LineNr ctermfg=grey
 highlight CursorLineNr cterm=bold
 
 " treesitter
+" nvim-treesitter is on its `main` branch, which dropped the old
+" `nvim-treesitter.configs` module: parsers are installed explicitly and
+" highlighting is turned on per-filetype by Neovim itself.
 lua << EOF
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "c", "cpp", "lua", "python", "javascript", "html", "css" },
-  highlight = { enable = true, additional_vim_regex_highlighting = false },
+require('nvim-treesitter').setup {}
+
+local parsers = {
+  'c', 'cpp', 'lua', 'python', 'javascript', 'html', 'css',
+  'markdown', 'markdown_inline',
 }
+-- Asynchronous, and a no-op once the parsers are present.
+require('nvim-treesitter').install(parsers)
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {
+    'c', 'cpp', 'lua', 'python', 'javascript', 'javascriptreact',
+    'html', 'css', 'markdown',
+  },
+  callback = function() pcall(vim.treesitter.start) end,
+})
 EOF
 
 " }}}
