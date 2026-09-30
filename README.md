@@ -9,10 +9,17 @@ This is a combination of amazing configurations I found online and a few persona
 2. Clone this repository to your local machine:
 
    ```bash
+   sudo apt install curl git zsh -y 
    mkdir -p ~/.config/nvim
    git clone https://github.com/hashaam1217/NvimConfig ~/.config/nvim
    sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+   sed -i "s/robbyrussell/bira/g" ~/.zshrc # Changing Theme to the one I like 
+   sed -i "s/git/git zsh-autosuggestions zsh-syntax-highlighting/g" ~/.zshrc # Adding plugins using ohmyzsh
+   source ~/.zshrc
    ```
 
 3. Install the required plugins (requires vimplug) by opening Neovim and running:
@@ -46,5 +53,8 @@ This is a combination of amazing configurations I found online and a few persona
 - `,ev`: Edit `init.vim` (your Neovim config file)
 - `,evs`: Source `init.vim` to apply changes
 
-Feel free to customize and extend this configuration to suit your needs! Happy coding! 😊🚀
 
+tree-sitter issue with nvim, todo later
+``` bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
